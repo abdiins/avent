@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Enumeration untuk Role dan Status
+enum Role {
+  ADMIN
+  PESERTA
+}
+
+enum RegistrationStatus {
+  REGISTERED
+  CHECKED_IN
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  passwordHash  String
+  role          Role           @default(PESERTA)
+  createdAt     DateTime       @default(now())
+  
+  // Relasi
+  eventsCreated Event[]        @relation("EventCreator")
+  registrations Registration[]
+}
+
+model Event {
+  id          String         @id @default(cuid())
+  name        String
+  description String         @db.Text
+  date        DateTime       // Tanggal acara
+  time        String         // Waktu acara (format HH:MM)
+  location    String
+  quota       Int
+  createdAt   DateTime       @default(now())
+  
+  // Relasi
+  createdById String
+  createdBy   User           @relation("EventCreator", fields: [createdById], references: [id])
+  registrations Registration[]
+}
+
+model Registration {
+  id          String             @id @default(cuid())
+  userId      String
+  eventId     String
+  ticketCode  String             @unique
+  status      RegistrationStatus @default(REGISTERED)
+  registeredAt DateTime          @default(now())
+  
+  // Relasi
+  user        User               @relation(fields: [userId], references: [id])
+  event       Event              @relation(fields: [eventId], references: [id])
+  
+  // Constraint: Satu user hanya bisa mendaftar sekali pada event yang sama
+  @@unique([userId, eventId])
+}
