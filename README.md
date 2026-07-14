@@ -106,15 +106,6 @@ eventflow/
 └── README.md                  # Dokumentasi ini
 ```
 
-## Deploy ke Vercel
-
-1. Push code ke GitHub
-2. Buat project baru di [Vercel](https://vercel.com)
-3. Set environment variables (`DATABASE_URL`, `NEXTAUTH_URL`, `NEXTAUTH_SECRET`)
-4. Vercel akan otomatis build dan deploy
-
-> **Catatan**: Untuk database, gunakan [Neon](https://neon.tech) (gratis) untuk PostgreSQL serverless.
-
 ## Lisensi
 
 Project ini dibuat untuk keperluan UAS Pemrograman Web 2.
