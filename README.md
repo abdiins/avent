@@ -1,4 +1,4 @@
-# EventFlow
+# avent
 
 Platform manajemen event dengan pendaftaran peserta dan check-in berbasis kode tiket digital.
 
