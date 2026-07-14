@@ -1,7 +1,7 @@
 # Product Requirement Document (PRD)
 
 ## 1. Project Overview
-- **Nama Aplikasi:** Avent (Eventflow)
+- **Nama Aplikasi:** Avent 
 - **Latar Belakang Masalah:** Pengelolaan acara (event) seringkali terkendala oleh proses pendaftaran yang manual dan pelacakan tiket yang tidak efisien. Penyelenggara kesulitan memantau sisa kuota dan daftar peserta secara realtime, sementara peserta membutuhkan platform yang mudah dan cepat untuk menemukan event serta mendapatkan tiket digital secara instan.
 - **Target Pengguna:**
   - **Penyelenggara Event (Admin):** Pihak yang ingin mempublikasikan, memanajemen, dan memonitor jalannya sebuah acara.
