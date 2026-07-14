@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["@prisma/client", "@prisma/adapter-mariadb", "mariadb", "bcrypt"],
+  serverExternalPackages: ["@prisma/client", "bcrypt"],
 };
 
 export default nextConfig;

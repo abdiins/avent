@@ -33,7 +33,12 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Registrasi gagal");
+        const detailMsg = data.details
+          ? data.details.map((d: { path?: string[]; message: string }) =>
+              `${d.path?.join(".") ?? ""}: ${d.message}`
+            ).join("\n")
+          : "";
+        setError(detailMsg || data.error || "Registrasi gagal");
         return;
       }
 
@@ -52,7 +57,11 @@ export default function RegisterPage() {
         <h1 className="gradient-text">Buat Akun</h1>
         <p>Daftar untuk mulai menjelajahi dan mengikuti event.</p>
 
-        {error && <div className="alert alert-error">{error}</div>}
+        {error && (
+          <div className="alert alert-error" style={{ whiteSpace: "pre-wrap" }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

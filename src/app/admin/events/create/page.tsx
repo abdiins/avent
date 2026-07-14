@@ -47,7 +47,12 @@ export default function CreateEventPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Gagal membuat event");
+        const detailMsg = data.details
+          ? data.details.map((d: { path?: string[]; message: string }) =>
+              `${d.path?.join(".") ?? ""}: ${d.message}`
+            ).join("\n")
+          : "";
+        setError(detailMsg || data.error || "Gagal membuat event");
         return;
       }
 
@@ -70,12 +75,16 @@ export default function CreateEventPage() {
   return (
     <div className="page-container" style={{ maxWidth: 640 }}>
       <div className="page-header">
-        <h1>✨ Buat Event Baru</h1>
+        <h1><span style={{ WebkitTextFillColor: "initial" }}>✨</span> Buat Event Baru</h1>
         <p>Isi form di bawah untuk membuat event.</p>
       </div>
 
       <div className="card animate-fade-in">
-        {error && <div className="alert alert-error">{error}</div>}
+        {error && (
+          <div className="alert alert-error" style={{ whiteSpace: "pre-wrap" }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

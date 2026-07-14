@@ -55,9 +55,14 @@ export default function CheckInPage() {
         });
         setTicketCode(""); // Reset input setelah berhasil
       } else {
+        const detailMsg = data.details
+          ? data.details.map((d: { path?: string[]; message: string }) =>
+              `${d.path?.join(".") ?? ""}: ${d.message}`
+            ).join("\n")
+          : "";
         setResult({
           success: false,
-          message: data.error,
+          message: detailMsg || data.error,
           registration: data.registration,
         });
       }
@@ -83,7 +88,7 @@ export default function CheckInPage() {
     <div className="page-container">
       <div className="checkin-container">
         <div className="page-header" style={{ textAlign: "center" }}>
-          <h1>📱 Check-in Peserta</h1>
+          <h1><span style={{ WebkitTextFillColor: "initial" }}>📱</span> Check-in Peserta</h1>
           <p>Masukkan kode tiket peserta untuk melakukan check-in.</p>
         </div>
 
@@ -102,7 +107,7 @@ export default function CheckInPage() {
                 onChange={(e) => setTicketCode(e.target.value)}
                 required
                 autoFocus
-                style={{ fontSize: "1.125rem", textAlign: "center", letterSpacing: "0.1em", fontFamily: "monospace" }}
+                style={{ fontSize: "0.9375rem", textAlign: "center", letterSpacing: "0.1em", fontFamily: "monospace" }}
               />
             </div>
             <button
@@ -117,7 +122,7 @@ export default function CheckInPage() {
 
         {/* Hasil Check-in */}
         {result && (
-          <div className={`checkin-result ${result.success ? "success" : "error"}`}>
+          <div className={`checkin-result ${result.success ? "success" : "error"}`} style={{ whiteSpace: "pre-wrap" }}>
             <h3>
               {result.success ? "✅ " : "❌ "}
               {result.message}

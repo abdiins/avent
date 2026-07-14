@@ -81,7 +81,12 @@ export default function RegisterButton({
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage(data.error || "Pendaftaran gagal");
+        const detailMsg = data.details
+          ? data.details.map((d: { path?: string[]; message: string }) =>
+              `${d.path?.join(".") ?? ""}: ${d.message}`
+            ).join("\n")
+          : "";
+        setMessage(detailMsg || data.error || "Pendaftaran gagal");
         return;
       }
 
@@ -98,7 +103,7 @@ export default function RegisterButton({
   return (
     <div>
       {message && (
-        <div className="alert alert-error" style={{ marginBottom: "0.75rem" }}>
+        <div className="alert alert-error" style={{ marginBottom: "0.75rem", whiteSpace: "pre-wrap" }}>
           {message}
         </div>
       )}

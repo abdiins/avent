@@ -1,7 +1,6 @@
 // src/app/page.tsx
 // Landing page — halaman utama EventFlow.
 import Link from "next/link";
-import Image from "next/image";
 import prisma from "@/lib/prisma";
 
 export default async function HomePage() {
@@ -61,15 +60,6 @@ export default async function HomePage() {
         {events.length > 0 ? (
           <div className="events-grid">
             {events.map((event) => {
-              const percentage =
-                event.quota > 0
-                  ? Math.min(
-                    (event._count.registrations / event.quota) * 100,
-                    100
-                  )
-                  : 0;
-              const isFull = event._count.registrations >= event.quota;
-
               return (
                 <div key={event.id} className="event-card animate-fade-in">
                   <h3>

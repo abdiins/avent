@@ -80,7 +80,12 @@ export default function EditEventPage({
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Gagal mengupdate event");
+        const detailMsg = data.details
+          ? data.details.map((d: { path?: string[]; message: string }) =>
+              `${d.path?.join(".") ?? ""}: ${d.message}`
+            ).join("\n")
+          : "";
+        setError(detailMsg || data.error || "Gagal mengupdate event");
         return;
       }
 
@@ -103,12 +108,16 @@ export default function EditEventPage({
   return (
     <div className="page-container" style={{ maxWidth: 640 }}>
       <div className="page-header">
-        <h1>✏️ Edit Event</h1>
+        <h1><span style={{ WebkitTextFillColor: "initial" }}>✏️</span> Edit Event</h1>
         <p>Perbarui informasi event di bawah.</p>
       </div>
 
       <div className="card animate-fade-in">
-        {error && <div className="alert alert-error">{error}</div>}
+        {error && (
+          <div className="alert alert-error" style={{ whiteSpace: "pre-wrap" }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

@@ -42,21 +42,19 @@ export default function AdminDashboardPage() {
       return;
     }
     if (status === "authenticated") {
-      fetchStats();
+      (async () => {
+        try {
+          const res = await fetch("/api/admin/stats");
+          const result = await res.json();
+          setData(result);
+        } catch (error) {
+          console.error("Gagal mengambil statistik:", error);
+        } finally {
+          setLoading(false);
+        }
+      })();
     }
   }, [status, session, router]);
-
-  const fetchStats = async () => {
-    try {
-      const res = await fetch("/api/admin/stats");
-      const result = await res.json();
-      setData(result);
-    } catch (error) {
-      console.error("Gagal mengambil statistik:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading || status === "loading") {
     return (
@@ -71,7 +69,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h1>📊 Dashboard Admin</h1>
+          <h1><span style={{ WebkitTextFillColor: "initial" }}>📊</span> Dashboard Admin</h1>
         <p>Ringkasan statistik seluruh event Anda.</p>
       </div>
 

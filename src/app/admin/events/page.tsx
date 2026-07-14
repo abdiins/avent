@@ -33,21 +33,19 @@ export default function AdminEventsPage() {
       return;
     }
     if (status === "authenticated") {
-      fetchEvents();
+      (async () => {
+        try {
+          const res = await fetch("/api/events");
+          const data = await res.json();
+          setEvents(data);
+        } catch (error) {
+          console.error("Gagal mengambil event:", error);
+        } finally {
+          setLoading(false);
+        }
+      })();
     }
   }, [status, session, router]);
-
-  const fetchEvents = async () => {
-    try {
-      const res = await fetch("/api/events");
-      const data = await res.json();
-      setEvents(data);
-    } catch (error) {
-      console.error("Gagal mengambil event:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Yakin ingin menghapus event "${name}"? Semua data pendaftaran juga akan dihapus.`)) {
@@ -76,7 +74,7 @@ export default function AdminEventsPage() {
     <div className="page-container">
       <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
         <div>
-          <h1>📋 Kelola Event</h1>
+          <h1><span style={{ WebkitTextFillColor: "initial" }}>📋</span> Kelola Event</h1>
           <p>Buat, edit, dan hapus event Anda.</p>
         </div>
         <Link href="/admin/events/create" className="btn btn-primary">

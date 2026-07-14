@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 
 interface Ticket {
@@ -40,21 +41,19 @@ export default function MyTicketsPage() {
     }
 
     if (status === "authenticated") {
-      fetchTickets();
+      (async () => {
+        try {
+          const res = await fetch("/api/registrations/my-tickets");
+          const data = await res.json();
+          setTickets(data);
+        } catch (error) {
+          console.error("Gagal mengambil tiket:", error);
+        } finally {
+          setLoading(false);
+        }
+      })();
     }
   }, [status, session, router]);
-
-  const fetchTickets = async () => {
-    try {
-      const res = await fetch("/api/registrations/my-tickets");
-      const data = await res.json();
-      setTickets(data);
-    } catch (error) {
-      console.error("Gagal mengambil tiket:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading || status === "loading") {
     return (
@@ -67,7 +66,7 @@ export default function MyTicketsPage() {
   return (
     <div className="page-container" style={{ maxWidth: 800 }}>
       <div className="page-header">
-        <h1>🎫 Tiket Saya</h1>
+        <h1><span style={{ WebkitTextFillColor: "initial" }}>🎫</span> Tiket Saya</h1>
         <p>Semua tiket event yang Anda ikuti.</p>
       </div>
 
@@ -128,9 +127,9 @@ export default function MyTicketsPage() {
           <h3>Belum Ada Tiket</h3>
           <p>
             Anda belum mendaftar ke event apapun.{" "}
-            <a href="/events" style={{ color: "var(--accent-primary-light)" }}>
+            <Link href="/events" style={{ color: "var(--accent-primary-light)" }}>
               Jelajahi event
-            </a>{" "}
+            </Link>{" "}
             dan daftar sekarang!
           </p>
         </div>
